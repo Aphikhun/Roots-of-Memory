@@ -38,7 +38,7 @@ public class QTE_Manager : GameManager
         {
             key = Input.inputString[0].ToString().ToUpper();
             getKey= true;
-        }
+        }*/
         if (wait_for_key == 0 && stack < num)
         {
             QTE_gen = Random.Range(0,key_list.Length);
@@ -47,22 +47,35 @@ public class QTE_Manager : GameManager
             key_text.SetText(key_list[QTE_gen].ToString());
             start_count = true;
 
-            if(getKey)
+            if(Input.GetKeyDown(KeyCode.W))
             {
-                if (key == key_list[QTE_gen])
-                {
-                    Debug.Log("press right");
-                    correct_key = 1;
-                    StartCoroutine(KeyPressing());
-                }
-                else
-                {
-                    Debug.Log("press wrong");
-                    correct_key = 2;
-                    StartCoroutine(KeyPressing());
-                }
+                key_list[QTE_gen] = "W";
             }
-        }*/
+            else if(Input.GetKeyDown(KeyCode.S))
+            {
+                key_list[QTE_gen] = "S";
+            }else if(Input.GetKeyDown(KeyCode.D))
+            {
+                key_list[QTE_gen] = "D";
+            }else if (Input.GetKeyDown(KeyCode.A))
+            {
+                key_list[QTE_gen] = "A";    
+            }
+            
+
+            if (key == key_list[QTE_gen])
+            {
+                Debug.Log("press right");
+                correct_key = 1;
+                StartCoroutine(KeyPressing());
+            }
+            else
+            {
+                Debug.Log("press wrong");
+                correct_key = 2;
+                StartCoroutine(KeyPressing());
+            }
+        }
 
         if(stack >= num)
         {
