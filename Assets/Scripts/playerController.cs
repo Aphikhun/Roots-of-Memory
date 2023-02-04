@@ -8,6 +8,8 @@ public class playerController : MonoBehaviour
     [SerializeField] private Rigidbody2D rb_player;
 
     public bool isGrab = false;
+    public StunBombBehavior StunBombPrefab;
+    public Transform LaunchOffSet;
     
     [SerializeField] private float move_speed = 2f;
     private bool isFacingRight = true;
@@ -53,7 +55,14 @@ public class playerController : MonoBehaviour
             move_speed = 2f;
         }
 
+        if (Input.GetKeyDown(KeyCode.F))
+        {
+            Instantiate(StunBombPrefab, LaunchOffSet.position, LaunchOffSet.rotation);
+        }
+
         Flip();
+
+        
     }
 
     void Flip()
@@ -64,6 +73,7 @@ public class playerController : MonoBehaviour
             Vector3 localScale = transform.localScale;
             localScale.x *= -1f;
             transform.localScale = localScale;
+            LaunchOffSet.localScale = localScale;
         }
     }
     void Move()
