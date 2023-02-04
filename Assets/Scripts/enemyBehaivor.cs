@@ -4,7 +4,10 @@ using UnityEngine;
 
 public class enemyBehaivor : MonoBehaviour
 {
+<<<<<<< HEAD
 
+=======
+>>>>>>> 1fe7bda95f4a725e4de399bb5d8e575ebee6b8bd
     public bool isStun = false;
     public bool canChasing = true;
     private Rigidbody2D rb_enemy;
@@ -16,10 +19,13 @@ public class enemyBehaivor : MonoBehaviour
     [SerializeField] private float stuntimelimit = 5f;
     [SerializeField] private float stuntime;
     [SerializeField] private Transform player;
+<<<<<<< HEAD
     private BoxCollider2D enemycollider;
     private int atk_tmp;
     private float enemy_attack_range_tmp;
     private float enemy_move_speed_tmp;
+=======
+>>>>>>> 1fe7bda95f4a725e4de399bb5d8e575ebee6b8bd
 
     // Start is called before the first frame update
     void Start()
@@ -28,6 +34,23 @@ public class enemyBehaivor : MonoBehaviour
         
     }
 
+<<<<<<< HEAD
+=======
+    // Update is called once per frame
+    void Update()
+    {
+        
+        if(!isStun)
+        {
+            if (canChasing)
+            {
+                Chase();
+            }
+            attack_time += Time.deltaTime;
+            DetectPlayer();
+        }
+    }
+>>>>>>> 1fe7bda95f4a725e4de399bb5d8e575ebee6b8bd
 
     private void Chase()
     {
