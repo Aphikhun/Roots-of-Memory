@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class enemyBehaivor : MonoBehaviour
 {
-    
+    public bool isStun = false;
     public bool canChasing = true;
     private Rigidbody2D rb_enemy;
     private float enemy_attack_cooldown = 1f;
@@ -13,6 +13,7 @@ public class enemyBehaivor : MonoBehaviour
     [SerializeField] private float enemy_move_speed = 4f;
     [SerializeField] private int atk = 2;
     [SerializeField] private Transform player;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -22,12 +23,16 @@ public class enemyBehaivor : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (canChasing)
+        
+        if(!isStun)
         {
-            Chase();
+            if (canChasing)
+            {
+                Chase();
+            }
+            attack_time += Time.deltaTime;
+            DetectPlayer();
         }
-        attack_time += Time.deltaTime;
-        DetectPlayer();
     }
 
     private void Chase()

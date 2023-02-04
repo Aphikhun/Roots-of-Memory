@@ -5,128 +5,96 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class QTE_Manager : GameManager
+public class QTE_Manager : MonoBehaviour
 {
-    
-    public int stack = 0;
-    public float fill_amount = 1f;
-    private float time = 1f;
-    private bool start_count = false;
-    private int QTE_gen;
-    private int wait_for_key;
-    private int correct_key;
-    private string key = "";
-    private bool getKey = false;
+    public bool stunEnemy;
+    private int num;
+    public char[] key;
+    public int stack;
+    private float fill_amount = 1f;
+    private bool waitForKey = true;
+    private string[] key_list = { "W","A","S","D"};
 
-    private string[] key_list = { "W", "A", "S", "D" };
-    [SerializeField] private TextMeshProUGUI key_text;
-    [SerializeField] private int num = 6;
-    [SerializeField] private GameObject QTE_panel;
-    // Start is called before the first frame update
-    void Start()
-    {
-        fill_amount= 1f;
-        stack = 0;
-    }
+    [SerializeField] private playerController player_control;
+    [SerializeField] private enemyBehaivor enemy;
+    [SerializeField] private GameObject QTE_UI;
+    [SerializeField] private TextMeshProUGUI QTE_text;
 
-    // Update is called once per frame
-    void Update()
+    public static QTE_Manager instance;
+    private void Start()
     {
         
-        /*
+    }
+    private void Update()
+    {
+        QTE_UI.SetActive(player_control.isGrab);
+        Countdown();
+
+        if (waitForKey)
+        {
+            RandomKey();
+        }
+        CheckKey();
+        if(stack >= 6)
+        {
+            player_control.isGrab = false;
+            enemy.isStun = true;
+
+        }
+
+    }
+
+    private void Countdown()
+    {
+        fill_amount -= Time.deltaTime;
+
+        QTE_UI.GetComponent<Image>().fillAmount = fill_amount;
+
+        if(fill_amount <= 0f )
+        {
+            Fail();
+        }
+    }
+    void Fail()
+    {
+        stack = 0;
+        fill_amount = 1f;
+        waitForKey = true;
+    }
+    void Success()
+    {
+        stack++;
+        fill_amount = 1f;
+        waitForKey = true;
+    }
+    void RandomKey()
+    {
+        num = Random.Range(0, 3);
+        QTE_text.SetText(key_list[num].ToString());
+        waitForKey = false;
+    }
+    private void CheckKey()
+    {
         if (Input.anyKeyDown)
         {
-            key = Input.inputString[0].ToString().ToUpper();
-            getKey= true;
-        }*/
-        if (wait_for_key == 0 && stack < num)
-        {
-            QTE_gen = Random.Range(0,key_list.Length);
-
-            wait_for_key = 1;
-            key_text.SetText(key_list[QTE_gen].ToString());
-            start_count = true;
-
-            if(Input.GetKeyDown(KeyCode.W))
-            {
-                key_list[QTE_gen] = "W";
-            }
-            else if(Input.GetKeyDown(KeyCode.S))
-            {
-                key_list[QTE_gen] = "S";
-            }else if(Input.GetKeyDown(KeyCode.D))
-            {
-                key_list[QTE_gen] = "D";
-            }else if (Input.GetKeyDown(KeyCode.A))
-            {
-                key_list[QTE_gen] = "A";    
-            }
+            key = Input.inputString[0].ToString().ToCharArray(); ;
             
 
-            if (key == key_list[QTE_gen])
+            Debug.Log(key);
+            if(key != null)
             {
-                Debug.Log("press right");
-                correct_key = 1;
-                StartCoroutine(KeyPressing());
+                if (System.Char.IsLetter(key[0]))
+                {
+                    if (key[0].ToString().ToUpper() == key_list[num])
+                    {
+                        Success();
+                    }
+                    else
+                    {
+                        Fail();
+                    }
+                }
             }
-            else
-            {
-                Debug.Log("press wrong");
-                correct_key = 2;
-                StartCoroutine(KeyPressing());
-            }
-        }
-
-        if(stack >= num)
-        {
-            QTE_panel.SetActive(false);
-        }
-        if (start_count)
-        {
-            time -= Time.deltaTime;
-            GetComponent<Image>().fillAmount = time;
-
-            if (time <= 0)
-            {
-                stack = 0;
-                correct_key = 0;
-                wait_for_key = 0;
-
-                time = 1f;
-                fill_amount = 1f;
-                start_count= false;
-                getKey = false;
-            }
-        }
-
-    }
-    IEnumerator KeyPressing()
-    {
-        if(correct_key == 1)
-        {
-            stack++;
-            correct_key = 0;
-            yield return new WaitForSeconds(2f);
-            wait_for_key = 0;
-            time = 1f;
-            fill_amount = 1f;
-            start_count = false;
-            getKey = false;
-            Debug.Log("sus "+stack);
-        }
-        else
-        {
-            stack = 0;
-            correct_key = 0;
-            yield return new WaitForSeconds(2f);
-            wait_for_key = 0;
-            time = 1f;
-            fill_amount = 1f;
-            start_count = false;
-            getKey = false;
-            Debug.Log("fail ");
         }
     }
-    
-
 }
