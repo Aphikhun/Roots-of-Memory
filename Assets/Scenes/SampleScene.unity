@@ -1173,7 +1173,7 @@ MonoBehaviour:
   key: 
   stack: 0
   player_control: {fileID: 1005343948}
-  enemy: {fileID: 0}
+  enemy: {fileID: 36163743}
   QTE_UI: {fileID: 247215191}
   QTE_text: {fileID: 97250222}
 --- !u!1 &2139398662
